@@ -1,0 +1,1 @@
+run-clang-tidy -p $1 -extra-arg=-I -extra-arg=/usr/include

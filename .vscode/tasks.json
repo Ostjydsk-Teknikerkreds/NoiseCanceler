@@ -1,0 +1,170 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build release",
+            "type": "shell",
+            "presentation": {
+                "clear": true
+            },
+            "command": "./scripts/cmake_build_release.sh",
+            "options": {
+                "cwd": "${workspaceFolder}/software"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": {
+                "base": "$gcc",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}/software"
+                ]
+            }
+        },
+        {
+            "label": "Build debug",
+            "type": "shell",
+            "presentation": {
+                "clear": true
+            },
+            "command": "./scripts/cmake_build_debug.sh",
+            "options": {
+                "cwd": "${workspaceFolder}/software"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": {
+                "base": "$gcc",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}/software"
+                ]
+            }
+        },
+        {
+            "label": "Build release (Win)",
+            "type": "shell",
+            "presentation": {
+                "clear": true
+            },
+            "command": "./scripts/cmake_build_release_win.sh",
+            "options": {
+                "cwd": "${workspaceFolder}/software"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": {
+                "base": "$gcc",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}/software"
+                ]
+            }
+        },
+        {
+            "label": "Build debug (Win)",
+            "type": "shell",
+            "presentation": {
+                "clear": true
+            },
+            "command": "./scripts/cmake_build_debug_win.sh",
+            "options": {
+                "cwd": "${workspaceFolder}/software"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": {
+                "base": "$gcc",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}/software"
+                ]
+            }
+        },
+        {
+            "label": "Clang format src folder",
+            "type": "shell",
+            "presentation": {
+                "clear": true // <-- this line
+            },
+            "command": "./software/scripts/clang_format_src.sh software/src",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "Clang tidy src folder",
+            "type": "shell",
+            "presentation": {
+                "clear": true // <-- this line
+            },
+            "command": "./software/scripts/clang_tidy_folder.sh ${workspaceFolder}/software/.cmake_build_debug",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "dependsOn": [
+                "Build debug"
+            ]
+        },
+        {
+            "label": "Run CPP check",
+            "type": "shell",
+            "presentation": {
+                "clear": true // <-- this line
+            },
+            "command": "./software/scripts/cppcheck_src.sh software/src",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "Build and run unittests",
+            "type": "shell",
+            "presentation": {
+                "clear": true // <-- this line
+            },
+            "command": "./scripts/build_and_run_unittests.sh",
+            "options": {
+                "cwd": "${workspaceFolder}/software"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        }
+    ]
+}
