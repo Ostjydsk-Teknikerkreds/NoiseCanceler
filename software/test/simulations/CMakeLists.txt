@@ -4,7 +4,11 @@ add_executable(${MODULE}
     main.cpp
 )
 
+find_package(PythonLibs REQUIRED)
+include_directories(${PYTHON_INCLUDE_DIRS})
+
 target_link_libraries(${MODULE}
     PUBLIC
-    PRIVATE
+        python3.10
+        domain::domain
 )
