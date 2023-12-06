@@ -305,7 +305,7 @@ struct _interpreter
 
     ~_interpreter()
     {
-        Py_Finalize();
+        // Py_Finalize();
     }
 };
 
