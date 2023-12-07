@@ -36,11 +36,11 @@
  *    Private Class/Functions
  ******************************************************************************/
 
-LMS::LMS(uint8_t inputs, float learning_rate) : _weights(inputs), _learning_rate(learning_rate)
+LMS::LMS(uint16_t inputs, float learning_rate) : _weights(inputs), _learning_rate(learning_rate)
 {
-    for (uint8_t i = 0; i < inputs; i++)
+    for (uint16_t i = 0; i < inputs; i++)
     {
-        _weights.at(i) = 0.01f;
+        _weights.at(i) = 0.f;
     }
 }
 
@@ -54,7 +54,7 @@ float LMS::evaluate(std::vector<float> inputs)
 {
     assert(_weights.size() == inputs.size());
     float ret = 0;
-    for (uint8_t i = 0; i < inputs.size(); i++)
+    for (uint16_t i = 0; i < inputs.size(); i++)
     {
         ret += inputs.at(i) * _weights.at(i);
     }
@@ -66,9 +66,16 @@ float LMS::evaluate(std::vector<float> inputs)
 void LMS::error(float error, std::vector<float> inputs)
 {
     assert(_weights.size() == inputs.size());
-    for(uint8_t i = 0; i < _weights.size(); i++)
+
+    float normalizer = 0;
+    for(uint16_t i = 0; i < inputs.size(); i++)
     {
-        _weights.at(i) -= error * _learning_rate * inputs[i] * _weights.at(i);
+        normalizer += inputs[i] * inputs[i];
+    }
+
+    for(uint16_t i = 0; i < _weights.size(); i++)
+    {
+        _weights.at(i) += error * _learning_rate * inputs[i] / (normalizer + 1.0E-8);
     }
 }
 

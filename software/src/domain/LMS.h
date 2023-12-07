@@ -45,9 +45,11 @@
 class LMS
 {
   public:
-    LMS(uint8_t inputs, float learning_rate);
+    LMS(uint16_t inputs, float learning_rate);
     float evaluate(std::vector<float> inputs);
     void error(float error, std::vector<float> inputs);
+
+    void reset();
 
   protected:
   private:
