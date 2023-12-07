@@ -1,17 +1,19 @@
-set(MODULE CppExampleProject)
+set(MODULE NoiseCanceler)
 
-add_executable (${MODULE} "main.cpp")
+add_executable (${MODULE}
+    main.cpp
+)
 
-if(WINDOWS)
+target_link_libraries(${MODULE}
+PUBLIC
+PRIVATE
+    pico_stdlib
+    hardware_adc
+)
 
-    find_package(Threads REQUIRED)
+# Create map/bin/hex/uf2 files
+pico_add_extra_outputs(${MODULE})
 
-    target_link_libraries(${MODULE}
-    PUBLIC
-    PRIVATE
-        ws2_32
-        -static-libstdc++
-        -static-libgcc
-        Threads::Threads -static
-    )
-endif()
+# Enable USB serial
+pico_enable_stdio_usb(${MODULE} 1)
+pico_enable_stdio_uart(${MODULE} 0)
