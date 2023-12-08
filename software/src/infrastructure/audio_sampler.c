@@ -1,63 +1,66 @@
 /*******************************************************************************
- * @file LMS.h
- * @date 2023-12-06
+ * @file AudioSampler.cpp
+ * @date 2023-12-07
  * @author Markus Rytter (markus.r@live.dk)
  *
  * @copyright Copyright (c) 2023
  *
- *******************************************************************************/
+ ******************************************************************************/
 
 /**
- * @addtogroup Domain
+ * @addtogroup Infrastructure
  * @{
  */
 
-#ifndef LMS_H
-#define LMS_H
-
 /*******************************************************************************
- *    Includes
+ *    Private Includes
  ******************************************************************************/
 
-#include <cstdint>
-#include <vector>
+#include "audio_sampler.h"
+
+#include <stdio.h>
+
+#include "hardware/adc.h"
+#include "pico/stdlib.h"
 
 /*******************************************************************************
- *    Defines
- ******************************************************************************/
-
-/*******************************************************************************
- *    Type defines
+ *    Private Defines
  ******************************************************************************/
 
 /*******************************************************************************
- *    External
+ *    Private Type defintions
  ******************************************************************************/
 
 /*******************************************************************************
- *    Function prototypes
+ *    Extern
  ******************************************************************************/
 
 /*******************************************************************************
- *    Class prototypes
+ *    Private Class/Functions
  ******************************************************************************/
 
-class LMS
+repeating_timer_t timer;
+
+/*******************************************************************************
+ *    Public Class/Functions
+ ******************************************************************************/
+
+static bool timer_callback(repeating_timer_t *rt)
 {
-  public:
-    LMS(uint16_t inputs, float learning_rate);
-    float evaluate(std::vector<float> inputs);
-    void error(float error, std::vector<float> inputs);
+    uint16_t read_value = adc_read();
+}
 
-    void reset();
+int audio_sampler_init()
+{
+    adc_init();
 
-  protected:
-  private:
-    std::vector<float> _weights;
-    float              _learning_rate;
-};
+    if (!add_repeating_timer_us(-100, timer_callback, NULL, &timer))
+    {
+        printf("Failed to add timer\n");
+        return 1;
+    }
+}
 
 /*******************************************************************************/
-/** @} addtogroup end */
 
-#endif // LMS_H
+/** @} addtogroup end */

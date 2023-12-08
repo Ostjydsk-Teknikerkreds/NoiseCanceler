@@ -1,5 +1,5 @@
 /*******************************************************************************
- * @file LMS.cpp
+ * @file lms.c
  * @date 2023-12-06
  * @author Markus Rytter (markus.r@live.dk)
  *
@@ -16,9 +16,11 @@
  *    Private Includes
  ******************************************************************************/
 
-#include "LMS.h"
+#include "lms.h"
 
-#include <cassert>
+#include <assert.h>
+#include <stdio.h>
+#include <string.h>
 
 /*******************************************************************************
  *    Private Defines
@@ -36,11 +38,24 @@
  *    Private Class/Functions
  ******************************************************************************/
 
-LMS::LMS(uint16_t inputs, float learning_rate) : _weights(inputs), _learning_rate(learning_rate)
+static float lms_filter_get_input_normalizer(float *inputs, uint16_t size)
 {
-    for (uint16_t i = 0; i < inputs; i++)
+    float ret = 0;
+    for(uint16_t i = 0; i < size; i++)
     {
-        _weights.at(i) = 0.f;
+        ret += inputs[i] * inputs[i];
+    }
+    return ret;
+}
+
+/*******************************************************************************/
+
+static void lms_filter_error(lms_filter_t *filter, float *inputs, uint16_t size, float error)
+{
+    float normalizer = lms_filter_get_input_normalizer(inputs, size);
+    for(int i = 0; i < size; i++)
+    {
+        filter->weights[i] += error * filter->step_size * inputs[i] / (normalizer + filter->regularization);
     }
 }
 
@@ -50,33 +65,26 @@ LMS::LMS(uint16_t inputs, float learning_rate) : _weights(inputs), _learning_rat
  *    Public Class/Functions
  ******************************************************************************/
 
-float LMS::evaluate(std::vector<float> inputs)
+void lms_filter_init(lms_filter_t *filter, uint16_t inputs, float step_size, float regularization)
 {
-    assert(_weights.size() == inputs.size());
-    float ret = 0;
-    for (uint16_t i = 0; i < inputs.size(); i++)
-    {
-        ret += inputs.at(i) * _weights.at(i);
-    }
-    return ret;
+    filter->weights = (float *) malloc(sizeof(float) * inputs);
+    memset(filter->weights, 0, sizeof(float) * inputs);
+    filter->step_size = step_size;
+    filter->regularization = regularization;
 }
 
 /*******************************************************************************/
 
-void LMS::error(float error, std::vector<float> inputs)
+float lms_filter_evaluate(float * inputs, uint16_t size, float desired)
 {
-    assert(_weights.size() == inputs.size());
-
-    float normalizer = 0;
-    for(uint16_t i = 0; i < inputs.size(); i++)
+    float ret = 0;
+    assert(size == filter->number_of_weights);
+    for(int i = 0; i < size; i++)
     {
-        normalizer += inputs[i] * inputs[i];
+        ret += filter->weights[i] * inputs[i];
     }
-
-    for(uint16_t i = 0; i < _weights.size(); i++)
-    {
-        _weights.at(i) += error * _learning_rate * inputs[i] / (normalizer + 1.0E-8);
-    }
+    lms_filter_error(filter, inputs, size, desired - ret);
+    return ret;
 }
 
 /*******************************************************************************/

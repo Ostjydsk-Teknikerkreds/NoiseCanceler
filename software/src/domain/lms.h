@@ -1,6 +1,6 @@
 /*******************************************************************************
- * @file AudioSampler.h
- * @date 2023-12-07
+ * @file lms.h
+ * @date 2023-12-06
  * @author Markus Rytter (markus.r@live.dk)
  *
  * @copyright Copyright (c) 2023
@@ -8,16 +8,19 @@
  *******************************************************************************/
 
 /**
- * @addtogroup Infrastructure
+ * @addtogroup Domain
  * @{
  */
 
-#ifndef AUDIO_SAMPLER_H
-#define AUDIO_SAMPLER_H
+#ifndef LMS_H
+#define LMS_H
 
 /*******************************************************************************
  *    Includes
  ******************************************************************************/
+
+#include <cstdint>
+#include <vector>
 
 /*******************************************************************************
  *    Defines
@@ -27,6 +30,13 @@
  *    Type defines
  ******************************************************************************/
 
+typedef struct {
+  float * weights;
+  uint16_t number_of_weights;
+  float step_size;
+  float regularization;
+} lms_filter_t;
+
 /*******************************************************************************
  *    External
  ******************************************************************************/
@@ -35,22 +45,10 @@
  *    Function prototypes
  ******************************************************************************/
 
-/*******************************************************************************
- *    Class prototypes
- ******************************************************************************/
-
-/**
- * @brief Class AudioSampler
- *
- */
-class AudioSampler
-{
-  public:
-  protected:
-  private:
-};
+void lms_filter_init(lms_filter_t *filter, uint16_t inputs, float step_size, float regularization);
+float lms_filter_evaluate(float * inputs, uint16_t size, float desired);
 
 /*******************************************************************************/
 /** @} addtogroup end */
 
-#endif // AUDIO_SAMPLER_H
+#endif // LMS_H

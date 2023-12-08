@@ -5,7 +5,7 @@ add_library(${MODULE}::${MODULE} ALIAS ${MODULE})
 
 target_sources(${MODULE}
 PRIVATE
-    LMS.cpp
+    lms.c
 )
 
 target_include_directories(${MODULE} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
