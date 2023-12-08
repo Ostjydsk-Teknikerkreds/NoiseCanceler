@@ -21,6 +21,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 /*******************************************************************************
  *    Private Defines
@@ -50,17 +51,6 @@ static float lms_filter_get_input_normalizer(float *inputs, uint16_t size)
 
 /*******************************************************************************/
 
-static void lms_filter_error(lms_filter_t *filter, float *inputs, uint16_t size, float error)
-{
-    float normalizer = lms_filter_get_input_normalizer(inputs, size);
-    for(int i = 0; i < size; i++)
-    {
-        filter->weights[i] += error * filter->step_size * inputs[i] / (normalizer + filter->regularization);
-    }
-}
-
-/*******************************************************************************/
-
 /*******************************************************************************
  *    Public Class/Functions
  ******************************************************************************/
@@ -68,6 +58,7 @@ static void lms_filter_error(lms_filter_t *filter, float *inputs, uint16_t size,
 void lms_filter_init(lms_filter_t *filter, uint16_t inputs, float step_size, float regularization)
 {
     filter->weights = (float *) malloc(sizeof(float) * inputs);
+    filter->number_of_weights = inputs;
     memset(filter->weights, 0, sizeof(float) * inputs);
     filter->step_size = step_size;
     filter->regularization = regularization;
@@ -75,7 +66,7 @@ void lms_filter_init(lms_filter_t *filter, uint16_t inputs, float step_size, flo
 
 /*******************************************************************************/
 
-float lms_filter_evaluate(lms_filter_t *filter, float * inputs, uint16_t size, float desired)
+float lms_filter_evaluate(lms_filter_t *filter, float * inputs, uint16_t size)
 {
     float ret = 0;
     assert(size == filter->number_of_weights);
@@ -83,8 +74,18 @@ float lms_filter_evaluate(lms_filter_t *filter, float * inputs, uint16_t size, f
     {
         ret += filter->weights[i] * inputs[i];
     }
-    lms_filter_error(filter, inputs, size, desired - ret);
     return ret;
+}
+
+/*******************************************************************************/
+
+void lms_filter_error(lms_filter_t *filter, float *inputs, uint16_t size, float error)
+{
+    float normalizer = lms_filter_get_input_normalizer(inputs, size);
+    for(int i = 0; i < size; i++)
+    {
+        filter->weights[i] += error * filter->step_size * inputs[i] / (normalizer + filter->regularization);
+    }
 }
 
 /*******************************************************************************/

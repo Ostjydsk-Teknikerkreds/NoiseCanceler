@@ -45,7 +45,8 @@ typedef struct {
  ******************************************************************************/
 
 void lms_filter_init(lms_filter_t *filter, uint16_t inputs, float step_size, float regularization);
-float lms_filter_evaluate(lms_filter_t *filter, float * inputs, uint16_t size, float desired);
+float lms_filter_evaluate(lms_filter_t *filter, float * inputs, uint16_t size);
+void lms_filter_error(lms_filter_t *filter, float *inputs, uint16_t size, float error);
 
 /*******************************************************************************/
 /** @} addtogroup end */

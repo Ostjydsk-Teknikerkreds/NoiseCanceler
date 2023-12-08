@@ -167,7 +167,7 @@
             ]
         },
         {
-            "label": "Build and run simulations",
+            "label": "Build simulations",
             "type": "shell",
             "presentation": {
                 "clear": true // <-- this line
