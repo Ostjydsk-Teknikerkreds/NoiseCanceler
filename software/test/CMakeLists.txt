@@ -1,3 +1,6 @@
 
 #add_subdirectory(unittest)
-#add_subdirectory(simulations)
+
+if(${CMD_BUILD_PLATFORM} MATCHES "simulations")
+    add_subdirectory(simulations)
+endif()

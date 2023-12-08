@@ -75,7 +75,7 @@ void lms_filter_init(lms_filter_t *filter, uint16_t inputs, float step_size, flo
 
 /*******************************************************************************/
 
-float lms_filter_evaluate(float * inputs, uint16_t size, float desired)
+float lms_filter_evaluate(lms_filter_t *filter, float * inputs, uint16_t size, float desired)
 {
     float ret = 0;
     assert(size == filter->number_of_weights);

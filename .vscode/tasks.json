@@ -165,6 +165,24 @@
             "problemMatcher": [
                 "$gcc"
             ]
+        },
+        {
+            "label": "Build and run simulations",
+            "type": "shell",
+            "presentation": {
+                "clear": true // <-- this line
+            },
+            "command": "./scripts/cmake_build_simulations.sh",
+            "options": {
+                "cwd": "${workspaceFolder}/software"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
         }
     ]
 }

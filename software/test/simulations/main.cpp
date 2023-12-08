@@ -4,7 +4,7 @@
 #include <cmath>
 #include <deque>
 
-#include "LMS.h"
+#include "lms.h"
 
 #include "matplotlibcpp.h"
 namespace plt = matplotlibcpp;

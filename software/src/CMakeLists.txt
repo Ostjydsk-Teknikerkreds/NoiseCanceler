@@ -1,5 +1,9 @@
-add_subdirectory(application)
 #add_subdirectory(controller)
 add_subdirectory(domain)
-add_subdirectory(infrastructure)
-#add_subdirectory(hal)
+
+
+if(${CMD_BUILD_PLATFORM} MATCHES "target")
+    add_subdirectory(application)
+    #add_subdirectory(hal)
+    add_subdirectory(infrastructure)
+endif()

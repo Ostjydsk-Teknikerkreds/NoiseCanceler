@@ -1,7 +1,7 @@
 set(MODULE NoiseCanceler)
 
 add_executable (${MODULE}
-    main.cpp
+    main.c
 )
 
 target_link_libraries(${MODULE}
